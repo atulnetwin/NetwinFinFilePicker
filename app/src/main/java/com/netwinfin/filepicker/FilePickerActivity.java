@@ -30,7 +30,6 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.netwinfin.filepicker.adapters.DirectoryAdapter;
 import com.netwinfin.filepicker.adapters.DirectoryStackAdapter;
-import com.netwinfin.filepicker.databinding.ActivityMainBinding;
 import com.netwinfin.filepicker.models.Config;
 import com.netwinfin.filepicker.models.DirectoryModel;
 import com.netwinfin.filepicker.utils.SimpleItemDecoration;
@@ -77,7 +76,6 @@ public class FilePickerActivity extends AppCompatActivity {
         rl_no_files= findViewById(R.id.rl_no_files);
         rl_progress= findViewById(R.id.rl_progress);
         appBar = findViewById(R.id.appBar);
-        toolbar= appBar.findViewById(R.id.toolbar);
 
         initConfig();
     }
@@ -86,10 +84,10 @@ public class FilePickerActivity extends AppCompatActivity {
         filters = config.getExtensionFilters();
 
 
-       setSupportActionBar(toolbar);
+   /*    setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+*/
         if (config.getRootDir() != null) {
             root_dir = new File(config.getRootDir());
         } else {
@@ -233,7 +231,7 @@ public class FilePickerActivity extends AppCompatActivity {
 
             arr_dir_stack.add(model);
             rv_dir_path.scrollToPosition(arr_dir_stack.size() - 1);
-            toolbar.setTitle(model.getName());
+        //    toolbar.setTitle(model.getName());
         }
         if (arr_files.size() == 0) {
             rl_no_files.setVisibility(View.VISIBLE);
