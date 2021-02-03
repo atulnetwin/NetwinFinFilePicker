@@ -58,8 +58,8 @@ public class FilePickerActivity extends AppCompatActivity {
     RecyclerView rv_dir_path, rv_files;
     FloatingActionButton fab_select;
     RelativeLayout rl_no_files,rl_progress;
-    Toolbar toolbar;
-    AppBarLayout appBar;
+   // Toolbar toolbar;
+   // AppBarLayout appBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +73,8 @@ public class FilePickerActivity extends AppCompatActivity {
         fab_select= findViewById(R.id.fab_select);
         rl_no_files= findViewById(R.id.rl_no_files);
         rl_progress= findViewById(R.id.rl_progress);
-        appBar = findViewById(R.id.appBar);
-        toolbar = appBar.findViewById(R.id.toolbar);
+       // appBar = findViewById(R.id.appBar);
+      //  toolbar = appBar.findViewById(R.id.toolbar);
 
         initConfig();
     }
@@ -83,9 +83,9 @@ public class FilePickerActivity extends AppCompatActivity {
         filters = config.getExtensionFilters();
 
 
-        setSupportActionBar(toolbar);
+     /*   setSupportActionBar(toolbar);
        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);*/
 
         if (config.getRootDir() != null) {
             root_dir = new File(config.getRootDir());
@@ -230,7 +230,7 @@ public class FilePickerActivity extends AppCompatActivity {
 
             arr_dir_stack.add(model);
             rv_dir_path.scrollToPosition(arr_dir_stack.size() - 1);
-            toolbar.setTitle(model.getName());
+            //toolbar.setTitle(model.getName());
         }
         if (arr_files.size() == 0) {
             rl_no_files.setVisibility(View.VISIBLE);
