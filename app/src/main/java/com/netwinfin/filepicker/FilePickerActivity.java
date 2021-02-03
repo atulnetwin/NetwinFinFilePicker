@@ -74,6 +74,7 @@ public class FilePickerActivity extends AppCompatActivity {
         fab_select= findViewById(R.id.fab_select);
         rl_no_files= findViewById(R.id.rl_no_files);
         rl_progress= findViewById(R.id.rl_progress);
+        toolbar= findViewById(R.id.toolbar);
 
         initConfig();
     }
@@ -82,7 +83,7 @@ public class FilePickerActivity extends AppCompatActivity {
         filters = config.getExtensionFilters();
 
 
-       // setSupportActionBar(filePickerBinding.toolbar);
+       setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
