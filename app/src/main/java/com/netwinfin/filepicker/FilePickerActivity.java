@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,8 +23,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.netwinfin.filepicker.adapters.DirectoryAdapter;
 import com.netwinfin.filepicker.adapters.DirectoryStackAdapter;
 import com.netwinfin.filepicker.databinding.ActivityMainBinding;
@@ -38,7 +41,6 @@ import java.util.Comparator;
 
 public class FilePickerActivity extends AppCompatActivity {
     private static final String TAG = "FilePickerActivity";
-    private ActivityMainBinding filePickerBinding;
 
     private File root_dir;
     private ArrayList<String> selected_files;
@@ -56,15 +58,22 @@ public class FilePickerActivity extends AppCompatActivity {
     private Config config;
     private ArrayList<String> filters;
 
+    RecyclerView rv_dir_path, rv_files;
+    FloatingActionButton fab_select;
+    RelativeLayout rl_no_files,rl_progress;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         config = Config.getInstance();
         setTheme(config.getThemeId());
-        filePickerBinding = ActivityMainBinding.inflate(getLayoutInflater());
-        View view = filePickerBinding.getRoot();
-        setContentView(view);
+        setContentView(R.layout.activity_main);
+        rv_dir_path= findViewById(R.id.rv_dir_path);
+        rv_files= findViewById(R.id.rv_files);
+        fab_select= findViewById(R.id.fab_select);
+        rl_no_files= findViewById(R.id.rl_no_files);
+        rl_progress= findViewById(R.id.rl_progress);
 
         initConfig();
     }
@@ -102,7 +111,7 @@ public class FilePickerActivity extends AppCompatActivity {
             finish();
         }
 
-        filePickerBinding.fabSelect.setOnClickListener((v)->{
+        fab_select.setOnClickListener((v)->{
             Intent intent = new Intent();
             if(config.showOnlyDirectory()){
                 selected_files.clear();
@@ -118,16 +127,16 @@ public class FilePickerActivity extends AppCompatActivity {
         Resources.Theme theme = getTheme();
         theme.resolveAttribute(R.attr.unicorn_fabColor, typedValue, true);
         if(typedValue.data!=0){
-            filePickerBinding.fabSelect.setBackgroundTintList(ColorStateList.valueOf(typedValue.data));
+            fab_select.setBackgroundTintList(ColorStateList.valueOf(typedValue.data));
         }else{
-            filePickerBinding.fabSelect.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.unicorn_colorAccent)));
+            fab_select.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.unicorn_colorAccent)));
         }
 
     }
 
     private void setUpFilesView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(FilePickerActivity.this);
-        filePickerBinding.rvFiles.setLayoutManager(layoutManager);
+        rv_files.setLayoutManager(layoutManager);
         directoryAdapter = new DirectoryAdapter(FilePickerActivity.this, arr_files, false, new DirectoryAdapter.onFilesClickListener() {
             @Override
             public void onClicked(DirectoryModel model) {
@@ -148,16 +157,16 @@ public class FilePickerActivity extends AppCompatActivity {
                 }
             }
         });
-        filePickerBinding.rvFiles.setAdapter(directoryAdapter);
+        rv_files.setAdapter(directoryAdapter);
         directoryAdapter.notifyDataSetChanged();
         if(config.addItemDivider()){
-            filePickerBinding.rvFiles.addItemDecoration(new SimpleItemDecoration(FilePickerActivity.this));
+            rv_files.addItemDecoration(new SimpleItemDecoration(FilePickerActivity.this));
         }
     }
 
     private void setUpDirectoryStackView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(FilePickerActivity.this, RecyclerView.HORIZONTAL, false);
-        filePickerBinding.rvDirPath.setLayoutManager(layoutManager);
+        rv_dir_path.setLayoutManager(layoutManager);
         stackAdapter = new DirectoryStackAdapter(FilePickerActivity.this, arr_dir_stack, model -> {
             Log.e(TAG, model.toString());
             arr_dir_stack = new ArrayList<>(arr_dir_stack.subList(0, arr_dir_stack.indexOf(model) + 1));
@@ -165,7 +174,7 @@ public class FilePickerActivity extends AppCompatActivity {
             fetchDirectory(arr_dir_stack.remove(arr_dir_stack.size() - 1));
         });
 
-        filePickerBinding.rvDirPath.setAdapter(stackAdapter);
+        rv_dir_path.setAdapter(stackAdapter);
         stackAdapter.notifyDataSetChanged();
     }
 
@@ -173,7 +182,7 @@ public class FilePickerActivity extends AppCompatActivity {
      * Fetches list of files in a folder and filters files if filter present
      */
     private void fetchDirectory(DirectoryModel model) {
-        filePickerBinding.rlProgress.setVisibility(View.VISIBLE);
+        rl_progress.setVisibility(View.VISIBLE);
         selected_files.clear();
 
         arr_files.clear();
@@ -219,20 +228,19 @@ public class FilePickerActivity extends AppCompatActivity {
             Collections.sort(arr_files, new CustomFileComparator());
 
             arr_dir_stack.add(model);
-            filePickerBinding.rvDirPath.scrollToPosition(arr_dir_stack.size() - 1);
-            filePickerBinding.toolbar.setTitle(model.getName());
+            rv_dir_path.scrollToPosition(arr_dir_stack.size() - 1);
+            toolbar.setTitle(model.getName());
         }
         if (arr_files.size() == 0) {
-            filePickerBinding.rlNoFiles.setVisibility(View.VISIBLE);
+            rl_no_files.setVisibility(View.VISIBLE);
         } else {
-            filePickerBinding.rlNoFiles.setVisibility(View.GONE);
+            rl_no_files.setVisibility(View.GONE);
         }
-        filePickerBinding.rlProgress.setVisibility(View.GONE);
+        rl_progress.setVisibility(View.GONE);
         stackAdapter.notifyDataSetChanged();
         directoryAdapter.notifyDataSetChanged();
     }
 
-    // Custom Comparator to sort the list of files in lexicographical order
     public static class CustomFileComparator implements Comparator<DirectoryModel> {
         @Override
         public int compare(DirectoryModel o1, DirectoryModel o2) {
