@@ -71,8 +71,8 @@ public class FilePickerActivity extends AppCompatActivity {
 
 
        // setSupportActionBar(filePickerBinding.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+      //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         if (config.getRootDir() != null) {
             root_dir = new File(config.getRootDir());
@@ -217,7 +217,7 @@ public class FilePickerActivity extends AppCompatActivity {
 
             arr_dir_stack.add(model);
             filePickerBinding.rvDirPath.scrollToPosition(arr_dir_stack.size() - 1);
-            filePickerBinding.toolbar.setTitle(model.getName());
+          //  filePickerBinding.toolbar.setTitle(model.getName());
         }
         if (arr_files.size() == 0) {
             filePickerBinding.rlNoFiles.setVisibility(View.VISIBLE);
