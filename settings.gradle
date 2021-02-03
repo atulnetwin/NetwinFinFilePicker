@@ -1,2 +1,3 @@
+include ':filepickerlib'
 include ':app'
 rootProject.name = "NetwinFinFilePicker"
