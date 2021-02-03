@@ -26,6 +26,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.netwinfin.filepicker.adapters.DirectoryAdapter;
 import com.netwinfin.filepicker.adapters.DirectoryStackAdapter;
@@ -62,6 +63,7 @@ public class FilePickerActivity extends AppCompatActivity {
     FloatingActionButton fab_select;
     RelativeLayout rl_no_files,rl_progress;
     Toolbar toolbar;
+    AppBarLayout appBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,8 @@ public class FilePickerActivity extends AppCompatActivity {
         fab_select= findViewById(R.id.fab_select);
         rl_no_files= findViewById(R.id.rl_no_files);
         rl_progress= findViewById(R.id.rl_progress);
-        toolbar= findViewById(R.id.toolbar);
+        appBar = findViewById(R.id.appBar);
+        toolbar= appBar.findViewById(R.id.toolbar);
 
         initConfig();
     }
